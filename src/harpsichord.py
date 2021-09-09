@@ -58,7 +58,7 @@ def random_(arg):
         elif rand_ == 2:
             return "minor"
     elif arg == "octave":
-        _rand_ = randint(0,5)+1
+        _rand_ = 4
         return _rand_
 
 def make_music(dir_):
@@ -84,17 +84,22 @@ def play_sound(length):
     note = pick_random_note("note")
     motion = pick_random_note("motion")
     if motion == "up":
-        note_loc = (octave*12)+note+4
+        note_loc = (octave*12)+note
     elif motion == "down":  
-        note_loc = (octave*12)-note+4
+        note_loc = (octave*12)-note
     OCTAVE = math.floor((note_loc+8)/12)
     SURPLUS = note_loc - globals()["OCTAVEINT"+str(OCTAVE)]
     #TESTING print("SURPLUS="+str(SURPLUS)+", OCTAVE="+str(OCTAVE)+", NOTE="+str(note_loc)+" , frequency="+str(C1*(2**(OCTAVE-1))*(1.05946371509**(SURPLUS)))+" , duration="+str(length))
     sine(frequency=(C1*(2**(OCTAVE-1))*(1.05946371509**(SURPLUS))), duration=length)
 
+
 def pick_random_note(arg):
     if arg == "note":
-        return randint(0, 7)+1
+        note = randint(0, 7)+1
+        # if note is a sharp, retry
+        if (note % 2 == 0):
+            note = pick_random_note("note")
+        return note
     elif arg == "motion":
         rand = randint(0,1)
         if rand == 0:
